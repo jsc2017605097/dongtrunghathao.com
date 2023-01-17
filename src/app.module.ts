@@ -7,6 +7,7 @@ import { AdminModule } from './modules/admin/admin.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { BlogModule } from './modules/blog/blog.module';
 import { AppLoggerMiddleware } from './common/log-middleware';
+import { CategoryModule } from './modules/category/category.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -14,6 +15,7 @@ import { AppLoggerMiddleware } from './common/log-middleware';
     AdminModule,
     AuthModule,
     BlogModule,
+    CategoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
