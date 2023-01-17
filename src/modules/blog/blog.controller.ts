@@ -73,11 +73,23 @@ export class BlogController {
     @Body() updateBlogDto: UpdateBlogDto,
     @GetUser() admin,
   ) {
-    return await this.blogService.update(id, updateBlogDto, admin);
+    try {
+      return await this.blogService.update(id, updateBlogDto, admin);
+    } catch (error) {
+      throw new ApiError(error.message);
+    }
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.blogService.remove(+id);
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: 'delete blog ' })
+  @HttpCode(HttpStatus.OK)
+  async remove(@Param('id') id: string) {
+    try {
+      return await this.blogService.remove(id);
+    } catch (error) {
+      throw new ApiError(error.message);
+    }
   }
 }

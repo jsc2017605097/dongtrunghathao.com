@@ -25,6 +25,7 @@ export class ValidationPipe implements PipeTransform<any> {
       }
       throw new ApiError(message);
     }
+    return object;
   }
 
   private toValidate(metatype: Function): boolean {

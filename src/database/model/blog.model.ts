@@ -22,6 +22,9 @@ export class Blog {
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Admin.name })
   updatedBy: string;
+
+  @Prop({ type: Boolean, default: false })
+  isDeleted: boolean;
 }
 
 export const BlogSchema = SchemaFactory.createForClass(Blog);

@@ -12,8 +12,6 @@ export class BlogService {
     @InjectModel(Blog.name) private readonly blogModel: Model<Blog>,
   ) {}
   async create(createBlogDto: CreateBlogDto, admin) {
-    console.debug(createBlogDto);
-
     const blog = {
       title: createBlogDto.title,
       content: createBlogDto.content,
@@ -26,7 +24,11 @@ export class BlogService {
   }
 
   async findAll() {
-    return await this.blogModel.find({});
+    return await this.blogModel
+      .find({ isDeleted: false })
+      .skip(0)
+      .limit(10)
+      .sort({ createdAt: -1 });
   }
 
   async findOne(id: string) {
@@ -34,7 +36,6 @@ export class BlogService {
   }
 
   async update(id: string, updateBlogDto: UpdateBlogDto, admin: Admin) {
-    console.debug(updateBlogDto);
     const blog = {
       ...updateBlogDto,
       updatedBy: admin['_id'],
@@ -48,7 +49,11 @@ export class BlogService {
     return updateBlog;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} blog`;
+  async remove(id: string) {
+    return await this.blogModel.findOneAndUpdate(
+      { _id: id },
+      { isDeleted: true },
+      { new: true },
+    );
   }
 }
