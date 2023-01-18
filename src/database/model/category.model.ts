@@ -1,22 +1,18 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import { Admin } from './admin.model';
-import { Category } from './category.model';
-export type BlogDocument = Blog & Document;
+export type CategoryDocument = Category & Document;
 
 @Schema({
   timestamps: true,
-  collection: 'Blog',
+  collection: 'Category',
 })
-export class Blog {
+export class Category {
   @Prop({ type: String })
-  title: string;
+  name: string;
 
   @Prop({ type: String })
-  content: string;
-
-  @Prop({ type: String })
-  blogPhotoUrl: string;
+  CategoryPhotoUrl: string;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Admin.name })
   createdBy: string;
@@ -26,9 +22,6 @@ export class Blog {
 
   @Prop({ type: Boolean, default: false })
   isDeleted: boolean;
-
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Category.name })
-  categoryId: string;
 }
 
-export const BlogSchema = SchemaFactory.createForClass(Blog);
+export const CategorySchema = SchemaFactory.createForClass(Category);

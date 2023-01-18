@@ -14,4 +14,8 @@ export class CreateBlogDto {
   @IsNotEmpty()
   @IsUrl()
   blogPhotoUrl: string;
+
+  @ApiProperty({ required: true })
+  @IsNotEmpty()
+  categoryId: string;
 }

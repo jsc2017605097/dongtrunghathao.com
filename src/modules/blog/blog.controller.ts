@@ -9,6 +9,7 @@ import {
   UseGuards,
   HttpCode,
   HttpStatus,
+  Query,
 } from '@nestjs/common';
 import { BlogService } from './blog.service';
 import { CreateBlogDto } from './dto/create-blog.dto';
@@ -17,6 +18,7 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/jwt.guard';
 import { GetUser } from 'src/common/get-user.decorator';
 import { ApiError, ApiOK } from 'src/common/api-response';
+import { BlogListDTO } from './dto/get-blog-list.dto';
 
 @Controller('blog')
 @ApiTags('Blog')
@@ -42,9 +44,10 @@ export class BlogController {
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'get blog list' })
   @HttpCode(HttpStatus.OK)
-  async findAll() {
+  async findAll(@Query() blogListDTO: BlogListDTO) {
     try {
-      return await this.blogService.findAll();
+      const result = await this.blogService.findAll(blogListDTO);
+      return new ApiOK(result);
     } catch (error) {
       throw new ApiError(error.message);
     }
@@ -57,7 +60,8 @@ export class BlogController {
   @HttpCode(HttpStatus.OK)
   async findOne(@Param('id') id: string) {
     try {
-      return await this.blogService.findOne(id);
+      const result = await this.blogService.findOne(id);
+      return new ApiOK(result);
     } catch (error) {
       throw new ApiError(error.message);
     }
@@ -74,7 +78,8 @@ export class BlogController {
     @GetUser() admin,
   ) {
     try {
-      return await this.blogService.update(id, updateBlogDto, admin);
+      const result = await this.blogService.update(id, updateBlogDto, admin);
+      return new ApiOK(result);
     } catch (error) {
       throw new ApiError(error.message);
     }
@@ -87,7 +92,8 @@ export class BlogController {
   @HttpCode(HttpStatus.OK)
   async remove(@Param('id') id: string) {
     try {
-      return await this.blogService.remove(id);
+      const result = await this.blogService.remove(id);
+      return new ApiOK(result);
     } catch (error) {
       throw new ApiError(error.message);
     }
