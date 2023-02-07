@@ -9,30 +9,31 @@ import {
   UseGuards,
   HttpCode,
   HttpStatus,
-  Query,
 } from '@nestjs/common';
-import { BlogService } from './blog.service';
-import { CreateBlogDto } from './dto/create-blog.dto';
-import { UpdateBlogDto } from './dto/update-blog.dto';
+import { CategoryService } from './category.service';
+import { CreateCategoryDto } from './dto/create-category.dto';
+import { UpdateCategoryDto } from './dto/update-category.dto';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/jwt.guard';
 import { GetUser } from 'src/common/get-user.decorator';
 import { ApiError, ApiOK } from 'src/common/api-response';
-import { BlogListDTO } from './dto/get-blog-list.dto';
 
-@Controller('blog')
-@ApiTags('Blog')
-export class BlogController {
-  constructor(private readonly blogService: BlogService) {}
+@ApiTags('Category')
+@Controller('category')
+export class CategoryController {
+  constructor(private readonly categoryService: CategoryService) {}
 
   @Post()
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
-  @ApiOperation({ summary: 'create new blog' })
+  @ApiOperation({ summary: 'create category' })
   @HttpCode(HttpStatus.OK)
-  async create(@Body() createBlogDto: CreateBlogDto, @GetUser() admin) {
+  async create(@Body() createCategoryDto: CreateCategoryDto, @GetUser() admin) {
     try {
-      const result = await this.blogService.create(createBlogDto, admin);
+      const result = await this.categoryService.create(
+        createCategoryDto,
+        admin,
+      );
       return new ApiOK(result);
     } catch (error) {
       throw new ApiError(error.message);
@@ -42,11 +43,11 @@ export class BlogController {
   @Get()
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
-  @ApiOperation({ summary: 'get blog list' })
+  @ApiOperation({ summary: 'get category list' })
   @HttpCode(HttpStatus.OK)
-  async findAll(@Query() blogListDTO: BlogListDTO) {
+  async findAll() {
     try {
-      const result = await this.blogService.findAll(blogListDTO);
+      const result = await this.categoryService.findAll();
       return new ApiOK(result);
     } catch (error) {
       throw new ApiError(error.message);
@@ -56,11 +57,11 @@ export class BlogController {
   @Get(':id')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
-  @ApiOperation({ summary: 'get blog detail' })
+  @ApiOperation({ summary: 'get category detail' })
   @HttpCode(HttpStatus.OK)
   async findOne(@Param('id') id: string) {
     try {
-      const result = await this.blogService.findOne(id);
+      const result = await this.categoryService.findOne(id);
       return new ApiOK(result);
     } catch (error) {
       throw new ApiError(error.message);
@@ -70,15 +71,19 @@ export class BlogController {
   @Patch(':id')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
-  @ApiOperation({ summary: 'edit blog detail' })
+  @ApiOperation({ summary: 'edit category' })
   @HttpCode(HttpStatus.OK)
   async update(
     @Param('id') id: string,
-    @Body() updateBlogDto: UpdateBlogDto,
+    @Body() updateCategoryDto: UpdateCategoryDto,
     @GetUser() admin,
   ) {
     try {
-      const result = await this.blogService.update(id, updateBlogDto, admin);
+      const result = await this.categoryService.update(
+        id,
+        updateCategoryDto,
+        admin,
+      );
       return new ApiOK(result);
     } catch (error) {
       throw new ApiError(error.message);
@@ -88,11 +93,11 @@ export class BlogController {
   @Delete(':id')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
-  @ApiOperation({ summary: 'delete blog ' })
+  @ApiOperation({ summary: 'delete category' })
   @HttpCode(HttpStatus.OK)
-  async remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string, @GetUser() admin) {
     try {
-      const result = await this.blogService.remove(id);
+      const result = await this.categoryService.remove(id, admin);
       return new ApiOK(result);
     } catch (error) {
       throw new ApiError(error.message);

@@ -60,7 +60,7 @@ export class AdminController {
     }
   }
 
-  @Patch(':id')
+  @Patch('')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'edit admin' })
@@ -71,7 +71,7 @@ export class AdminController {
     @GetUser() user,
   ) {
     try {
-      return await this.adminService.update(id, updateAdminDto, user);
+      return await this.adminService.update(updateAdminDto, user);
     } catch (error) {
       throw new ApiError(error.message);
     }

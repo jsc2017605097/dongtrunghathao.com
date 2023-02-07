@@ -6,9 +6,16 @@ import {
   SwaggerModule,
 } from '@nestjs/swagger';
 import { ValidationPipe } from './common/validation.pipe';
+const cors = require('cors');
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const corsOptions = {
+    origin: '*',
+    credentials: true, //access-control-allow-credentials:true
+    optionSuccessStatus: 200,
+  };
+  app.use(cors(corsOptions));
   app.useGlobalPipes(new ValidationPipe());
   const config = new DocumentBuilder()
     .setTitle('Dong trung ha thao')
