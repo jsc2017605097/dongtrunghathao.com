@@ -51,6 +51,17 @@ export class AdminService {
     return newAdmin;
   }
 
+  async changeNickname(nickname: string, user) {
+    const result = await this.adminModel.findOneAndUpdate(
+      {
+        username: user.username,
+      },
+      { nickname },
+      { new: true },
+    );
+    return result.username;
+  }
+
   remove(id: number) {
     return `This action removes a #${id} admin`;
   }

@@ -33,6 +33,23 @@ export class AdminController {
     }
   }
 
+  @Patch('/change-nickname')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: 'Get admin list' })
+  @HttpCode(HttpStatus.OK)
+  async changeNickname(@Body() body: any, @GetUser() user) {
+    try {
+      const result = await this.adminService.changeNickname(
+        body.nickname,
+        user,
+      );
+      return new ApiOK(result);
+    } catch (error) {
+      throw new ApiError(error.message);
+    }
+  }
+
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Get admin list' })
