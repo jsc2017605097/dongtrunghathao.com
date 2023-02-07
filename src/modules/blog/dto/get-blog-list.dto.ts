@@ -18,4 +18,8 @@ export class BlogListDTO {
   @ApiProperty({ required: false })
   @IsOptional()
   categoryId: string;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  keyword: string;
 }
