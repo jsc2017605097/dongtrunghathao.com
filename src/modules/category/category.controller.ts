@@ -46,12 +46,26 @@ export class CategoryController {
   @ApiOperation({ summary: 'get category list' })
   @HttpCode(HttpStatus.OK)
   async findAll() {
-    return await this.categoryService.findAll();
+    try {
+      const result = await this.categoryService.findAll();
+      return new ApiOK(result);
+    } catch (error) {
+      throw new ApiError(error.message);
+    }
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.categoryService.findOne(+id);
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: 'get category detail' })
+  @HttpCode(HttpStatus.OK)
+  async findOne(@Param('id') id: string) {
+    try {
+      const result = await this.categoryService.findOne(id);
+      return new ApiOK(result);
+    } catch (error) {
+      throw new ApiError(error.message);
+    }
   }
 
   @Patch(':id')

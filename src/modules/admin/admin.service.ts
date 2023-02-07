@@ -33,7 +33,7 @@ export class AdminService {
     return await this.adminModel.findOne({ _id: id }, { password: 0 });
   }
 
-  async update(id: string, updateAdminDto: UpdateAdminDto, user) {
+  async update(updateAdminDto: UpdateAdminDto, user) {
     const admin = await this.adminModel.findOne({ username: user.username });
     const pw = await Utils.decrypt(updateAdminDto.password, admin.password);
     if (!pw) throw new ApiError('Password is invalid');
@@ -43,7 +43,7 @@ export class AdminService {
       password: await Utils.encryptUserPassword(updateAdminDto.newPassword),
     };
     const newAdmin = await this.adminModel.findOneAndUpdate(
-      { _id: id },
+      { _id: admin._id },
       updateUser,
       { new: true },
     );

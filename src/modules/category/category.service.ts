@@ -23,11 +23,14 @@ export class CategoryService {
   }
 
   async findAll() {
-    return await this.categoryModel.find({ isDeleted: false });
+    return await this.categoryModel
+      .find({ isDeleted: false })
+      .populate('createdBy')
+      .populate('updatedBy');
   }
 
-  async findOne(id: number) {
-    return `This action returns a #${id} category`;
+  async findOne(_id: string) {
+    return await await this.categoryModel.findOne({ _id });
   }
 
   async update(id: string, updateCategoryDto: UpdateCategoryDto, admin) {

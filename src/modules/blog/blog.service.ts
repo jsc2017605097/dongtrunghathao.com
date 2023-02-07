@@ -35,18 +35,21 @@ export class BlogService {
 
   async findAll(blogListDTO: BlogListDTO) {
     const { categoryId } = blogListDTO;
-    const query = { isDeleted: false, categoryId };
-    return await this.blogModel
+    const query = { isDeleted: false };
+    if (categoryId) query['categoryId'] = categoryId;
+    const result = await this.blogModel
       .find(query)
       .skip(blogListDTO.offset || PAGINATION.OFFSET)
       .limit(blogListDTO.limit || PAGINATION.LIMIT)
       .sort({ createdAt: -1 })
       .populate('categoryId')
       .exec();
+    const total = await this.blogModel.find(query).count();
+    return { result, total };
   }
 
   async findOne(id: string) {
-    return await this.blogModel.findOne({ _id: id }).populate(Category.name);
+    return await this.blogModel.findOne({ _id: id }).populate('categoryId');
   }
 
   async update(id: string, updateBlogDto: UpdateBlogDto, admin: Admin) {
