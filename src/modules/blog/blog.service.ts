@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreateBlogDto } from './dto/create-blog.dto';
+import { CreateBlogDto, GetDetailBlog } from './dto/create-blog.dto';
 import { UpdateBlogDto } from './dto/update-blog.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Admin, Blog, Category } from 'src/database/model';
@@ -34,16 +34,23 @@ export class BlogService {
   }
 
   async findAll(blogListDTO: BlogListDTO) {
-    const { categoryId, keyword } = blogListDTO;
+    const { categoryId, keyword, sortField, sortType } = blogListDTO;
     const query = { isDeleted: false };
     if (categoryId) query['categoryId'] = categoryId;
     if (keyword) query['title'] = { $regex: keyword, $options: 'i' };
+
+    const sortQuery = {};
+    if (sortField && sortType) {
+      sortQuery[sortField] = sortType;
+    } else {
+      sortQuery['createdAt'] = -1;
+    }
 
     const result = await this.blogModel
       .find(query)
       .skip(blogListDTO.offset || PAGINATION.OFFSET)
       .limit(blogListDTO.limit || PAGINATION.LIMIT)
-      .sort({ createdAt: -1 })
+      .sort(sortQuery)
       .populate('categoryId')
       .populate('createdBy')
       .populate('updatedBy')
@@ -52,8 +59,30 @@ export class BlogService {
     return { result, total };
   }
 
-  async findOne(id: string) {
-    return await this.blogModel.findOne({ _id: id }).populate('categoryId');
+  async findRandom() {
+    return await this.blogModel.aggregate([
+      { $match: {} },
+      { $sample: { size: 10 } },
+    ]);
+  }
+
+  async findOne(id: string, query: GetDetailBlog) {
+    if (query?.viewer) {
+      return await this.blogModel
+        .findOneAndUpdate(
+          { _id: id },
+          {
+            $inc: {
+              views: 1,
+            },
+          },
+          {
+            new: true,
+          },
+        )
+        .populate('categoryId');
+    } else
+      return await this.blogModel.findOne({ _id: id }).populate('categoryId');
   }
 
   async update(id: string, updateBlogDto: UpdateBlogDto, admin: Admin) {

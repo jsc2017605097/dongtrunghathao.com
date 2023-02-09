@@ -29,6 +29,9 @@ export class Blog {
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Category.name })
   categoryId: string;
+
+  @Prop({ type: Number, default: 0 })
+  views: number;
 }
 
 export const BlogSchema = SchemaFactory.createForClass(Blog);

@@ -22,4 +22,13 @@ export class BlogListDTO {
   @ApiProperty({ required: false })
   @IsOptional()
   keyword: string;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  sortField: string;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @Type(() => Number)
+  sortType: string;
 }

@@ -1,5 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsUrl } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsOptional, IsUrl } from 'class-validator';
+
+export enum VIEWER {
+  CLIENT = 'client',
+}
 
 export class CreateBlogDto {
   @ApiProperty({ required: true })
@@ -18,4 +22,11 @@ export class CreateBlogDto {
   @ApiProperty({ required: true })
   @IsNotEmpty()
   categoryId: string;
+}
+
+export class GetDetailBlog {
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsEnum(VIEWER)
+  viewer: string;
 }

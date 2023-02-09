@@ -12,7 +12,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { BlogService } from './blog.service';
-import { CreateBlogDto } from './dto/create-blog.dto';
+import { CreateBlogDto, GetDetailBlog } from './dto/create-blog.dto';
 import { UpdateBlogDto } from './dto/update-blog.dto';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/jwt.guard';
@@ -40,8 +40,6 @@ export class BlogController {
   }
 
   @Get()
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'get blog list' })
   @HttpCode(HttpStatus.OK)
   async findAll(@Query() blogListDTO: BlogListDTO) {
@@ -53,14 +51,24 @@ export class BlogController {
     }
   }
 
+  @Get('/find-random')
+  @ApiOperation({ summary: 'get blog list random' })
+  @HttpCode(HttpStatus.OK)
+  async findAllRandom() {
+    try {
+      const result = await this.blogService.findRandom();
+      return new ApiOK(result);
+    } catch (error) {
+      throw new ApiError(error.message);
+    }
+  }
+
   @Get(':id')
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'get blog detail' })
   @HttpCode(HttpStatus.OK)
-  async findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string, @Query() query: GetDetailBlog) {
     try {
-      const result = await this.blogService.findOne(id);
+      const result = await this.blogService.findOne(id, query);
       return new ApiOK(result);
     } catch (error) {
       throw new ApiError(error.message);
