@@ -41,8 +41,6 @@ export class CategoryController {
   }
 
   @Get()
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'get category list' })
   @HttpCode(HttpStatus.OK)
   async findAll() {
