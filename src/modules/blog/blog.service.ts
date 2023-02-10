@@ -76,6 +76,19 @@ export class BlogService {
           createdBy: { $arrayElemAt: ['$createdBys', 0] },
         },
       },
+      {
+        $lookup: {
+          from: Category.name,
+          localField: 'categoryId',
+          foreignField: '_id',
+          as: 'cate',
+        },
+      },
+      {
+        $addFields: {
+          categoryId: { $arrayElemAt: ['$cate', 0] },
+        },
+      },
     ]);
   }
 
