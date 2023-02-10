@@ -63,6 +63,19 @@ export class BlogService {
     return await this.blogModel.aggregate([
       { $match: {} },
       { $sample: { size: 10 } },
+      {
+        $lookup: {
+          from: Admin.name,
+          localField: 'createdBy',
+          foreignField: '_id',
+          as: 'createdBys',
+        },
+      },
+      {
+        $addFields: {
+          createdBy: { $arrayElemAt: ['$createdBys', 0] },
+        },
+      },
     ]);
   }
 
