@@ -93,7 +93,8 @@ export class BlogService {
             new: true,
           },
         )
-        .populate('categoryId');
+        .populate('categoryId')
+        .populate('createdBy');
     } else
       return await this.blogModel.findOne({ _id: id }).populate('categoryId');
   }
