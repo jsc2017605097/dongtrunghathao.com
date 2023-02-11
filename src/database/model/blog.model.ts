@@ -32,6 +32,9 @@ export class Blog {
 
   @Prop({ type: Number, default: 0 })
   views: number;
+
+  @Prop({ type: Boolean, default: false })
+  isDisplayAtBanner: boolean;
 }
 
 export const BlogSchema = SchemaFactory.createForClass(Blog);

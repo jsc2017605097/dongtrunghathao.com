@@ -8,6 +8,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { BlogModule } from './modules/blog/blog.module';
 import { AppLoggerMiddleware } from './common/log-middleware';
 import { CategoryModule } from './modules/category/category.module';
+import { BannerModule } from './modules/banner/banner.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -16,6 +17,7 @@ import { CategoryModule } from './modules/category/category.module';
     AuthModule,
     BlogModule,
     CategoryModule,
+    BannerModule,
   ],
   controllers: [AppController],
   providers: [AppService],
