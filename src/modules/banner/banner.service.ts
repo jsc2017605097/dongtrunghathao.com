@@ -33,11 +33,8 @@ from './dto/update-banner.dto';
         return await this.bannerModel.find({ isDeleted: false });
     }
 
-    findOne(id: number) {
-        return `This action returns a #$ {
-            id
-        }
-        banner`;
+    async findOne(id: string) {
+        return await this.bannerModel.findOne({_id:id});
     }
 
     async update(id: string, updateBannerDto: UpdateBannerDto) {

@@ -18,8 +18,8 @@ export class BannerController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.bannerService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    return await this.bannerService.findOne(id);
   }
 
   @Patch(':id')
