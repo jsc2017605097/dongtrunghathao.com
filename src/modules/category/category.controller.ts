@@ -49,6 +49,7 @@ export class CategoryController {
       return new ApiOK(result);
     } catch (error) {
       throw new ApiError(error.message);
+      //
     }
   }
 
